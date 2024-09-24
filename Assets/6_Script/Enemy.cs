@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 8.0f; // 이동 속도
+    [SerializeField] private float moveSpeed = 1.0f; // 이동 속도
     private int currentIndex; // 현재 경로 인덱스
     private EnemyManager emi;
     public void Init()

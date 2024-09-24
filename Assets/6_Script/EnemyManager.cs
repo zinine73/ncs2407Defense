@@ -8,7 +8,9 @@ public class EnemyManager : MonoBehaviour
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private float spawnTime; // 생성 시간
     [SerializeField] private Transform[] waypoints; // 이동 위치 배열
+    private List<Enemy> enemyList; // 생성된 적 리스트
 
+    public List<Enemy> EnemyList => enemyList; // 생성된 적 리스트 프로퍼티
     public Transform[] Waypoints => waypoints; // 이동위치배열 프로퍼티
 
     private void Awake()
@@ -19,12 +21,18 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    void Start()
+    // Start는 코루틴으로 사용할 수 있다
+    IEnumerator Start()
     {
-        // 적 프레팝으로 오브젝트를 생성하고 Enemy 스크립트 연결
-        Enemy enemy = Instantiate(enemyPrefab, transform).GetComponent<Enemy>();
-        // 적 초기화
-        enemy.Init();
+        while (true)
+        {
+            // 적 프레팝으로 오브젝트를 생성하고 Enemy 스크립트 연결
+            Enemy enemy = Instantiate(enemyPrefab, transform).GetComponent<Enemy>();
+            // 적 초기화
+            enemy.Init();
+            // 생성시간 기다렸다 다음 적 생성
+            yield return new WaitForSeconds(spawnTime);
+        }
     }
 
     public void DestroyEnemy(Enemy enemy)

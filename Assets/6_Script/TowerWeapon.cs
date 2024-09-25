@@ -45,26 +45,68 @@ public class TowerWeapon : MonoBehaviour
             // 가장 가까운 거리를 찾기 위해 가장 큰 수로 먼저 초기화
             float closestDistance = Mathf.Infinity;
             // 리스트에 있는 모든 오브젝트 검사
-            //EnemyManager.instance.EnemyList
-                // 
+            foreach (var item in EnemyManager.instance.EnemyList)
+            {
+                // 두 오브젝트 사이의 거리를 측정
+                float distance = Vector3.Distance(item.transform.position, transform.position);
+                // 공격 사정 거리 안에 있으면서 가장 긴 거리보다 작으면
+                if ((distance <= attackRange) && (distance <= closestDistance))
+                {
+                    // 현재 거리를 최단 거리로 지정
+                    closestDistance = distance;
+                    // 공격 목표를 현재 오브젝트로 지정
+                    attackTarget = item.transform;
+                }
+            }
+            // 공격 목표가 null이 아니면
+            if (attackTarget != null)
+            {
+                // 공격 상태로 변경
+                ChangeState(WeaponState.AttactToTarget);
+            }
+            // 코루틴으로 계속 적 찾기
+            yield return null;
         }
-        yield return null;
     }
 
-    private IEnumerator AttackToTarget()
+    private IEnumerator AttactToTarget()
     {
         while(true)
         {
-
+            // 공격 목표가 사라지면
+            if (attackTarget == null)
+            {
+                // 적 찾기 상태로 변경
+                ChangeState(WeaponState.SearchTarget);
+                // 바로 while문 빠져 나오기
+                break;
+            }
+            // 적과의 거리 측정
+            float distance = Vector3.Distance(attackTarget.position, transform.position);
+            // 거리가 공격범위를 벗어나면
+            if (distance > attackRange)
+            {
+                // 공격목표를 없애고
+                attackTarget = null;
+                // 적 찾기 상태로 변경
+                ChangeState(WeaponState.SearchTarget);
+                // 바로 while문 빠져 나오기
+                break;
+            }
+            // 발사간격만큼 기다린 후 다시 공격
+            yield return new WaitForSeconds(attackRate);
+            // 발사체 생성
+            SpawnProjectile();
         }
-        yield return null;
     }
 
     private void SpawnProjectile()
     {
         // 발사체프리펩에서 발사체 생성
+        GameObject clone = Instantiate(projectilePrefab, spawnPoint.position, 
+            Quaternion.identity, transform);
 
         // 발사체에 공격목표 지정
-
+        clone.GetComponent<Projectile>().SetTarget(attackTarget);
     }
 }

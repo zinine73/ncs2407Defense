@@ -7,11 +7,13 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 6.0f; // 이동 속도
     private Transform target; // 공격 목표
-
-    public void SetTarget(Transform tr)
+    private float damage = 0f; // 데미지
+    public void SetTarget(Transform tr, float dmg)
     {
         // 공격 목표 지정
         target = tr;
+        // 데미지 값 설정
+        damage = dmg;
     }
     
     private void Update()
@@ -37,9 +39,9 @@ public class Projectile : MonoBehaviour
         if (!collision.CompareTag("ENEMY")) return;
         // 충돌한 오브젝트가 목표가 아니면 리턴
         if (collision.transform != target) return;
-        // 충돌한 적 삭제
-        collision.GetComponent<Enemy>().OnDie();
-        // 발사체도 삭제
+        // 충돌한 적에게 데미지 주기
+        collision.GetComponent<Enemy>().TakeDamage(damage);
+        // 발사체 삭제
         Destroy(gameObject);
     }
 }

@@ -14,6 +14,7 @@ public class TowerWeapon : MonoBehaviour
     [SerializeField] private Transform spawnPoint; // 발사체 생성 위치
     [SerializeField] private float attackRate = 0.5f; // 발사 간격
     [SerializeField] private float attackRange = 2.0f; // 발사체의 생성 범위
+    [SerializeField] private float attackDamage = 1.0f; // 발사체 공격력
     private WeaponState weaponState = WeaponState.SearchTarget; // 타워 상태 저장 변수
     private Transform attackTarget = null; // 공격 목표
 
@@ -35,7 +36,12 @@ public class TowerWeapon : MonoBehaviour
 
     void Update()
     {
-        
+        // 공격 중이면
+        if (attackTarget != null)
+        {
+            // 타워 돌리기 (위를 향하고 있는 스프라이트이므로 up)
+            transform.up = attackTarget.position - transform.position;
+        }
     }
 
     private IEnumerator SearchTarget()
@@ -106,7 +112,7 @@ public class TowerWeapon : MonoBehaviour
         GameObject clone = Instantiate(projectilePrefab, spawnPoint.position, 
             Quaternion.identity, transform);
 
-        // 발사체에 공격목표 지정
-        clone.GetComponent<Projectile>().SetTarget(attackTarget);
+        // 발사체에 공격목표 지정하면서 공격력도 전달
+        clone.GetComponent<Projectile>().SetTarget(attackTarget, attackDamage);
     }
 }

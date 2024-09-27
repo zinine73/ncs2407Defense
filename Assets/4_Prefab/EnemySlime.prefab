@@ -121,7 +121,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1
-  maxHP: 5
+  maxHP: 3
+  gold: 10
 --- !u!58 &8882183890263125913
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 1.0f; // 이동 속도
     [SerializeField] private float maxHP = 5.0f; // 최대 체력
+    [SerializeField] private int gold = 10; // 적을 처치했을 때 얻는 골드
     private bool isDie; // 사망 상태
     private int currentIndex; // 현재 경로 인덱스
     private float currentHP; // 현재 체력
@@ -49,14 +50,18 @@ public class Enemy : MonoBehaviour
         else
         {
             // 목료에 도달했으면 삭제
-            OnDie();
+            OnDie(true);
         }
     }
 
-    public void OnDie()
+    /// <summary>
+    /// 적이 goal에 도달하거나 체력이 다해 죽을 경우 호출
+    /// </summary>
+    /// <param name="isArrivedGoal">goal에 도착했는지 여부</param>
+    public void OnDie(bool isArrivedGoal = false)
     {
-        // 매니저에서 삭제 처리
-        EnemyManager.instance.DestroyEnemy(this);
+        // 매니저에서 삭제 처리하면서 골드 처리
+        EnemyManager.instance.DestroyEnemy(this, gold, isArrivedGoal);
     }
 
     public void TakeDamage(float damage)

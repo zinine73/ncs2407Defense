@@ -8,6 +8,12 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float moveSpeed = 6.0f; // 이동 속도
     private Transform target; // 공격 목표
     private float damage = 0f; // 데미지
+
+    /// <summary>
+    /// 발사체의 타겟 지정
+    /// </summary>
+    /// <param name="tr">타겟의 transform</param>
+    /// <param name="dmg">데미지 양</param>
     public void SetTarget(Transform tr, float dmg)
     {
         // 공격 목표 지정

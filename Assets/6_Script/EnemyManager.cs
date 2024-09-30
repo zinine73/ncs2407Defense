@@ -5,44 +5,67 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    public static EnemyManager instance;
-    [SerializeField] private GameObject[] enemyPrefab;
+    public static EnemyManager instance; // 싱글톤 인스턴스
     [SerializeField] private GameObject enemyHPSliderPrefab; // 체력을 나타내는 프리펩
     [SerializeField] private Transform canvasTransform; // UI를 표시할 캔버스의 tf
-    [SerializeField] private float spawnTime; // 생성 시간
     [SerializeField] private Transform[] waypoints; // 이동 위치 배열
+    private Wave currentWave; // 현재 웨이브 정보
+    private int currentEnemyCount; // 현재 남은 적 수
     private List<Enemy> enemyList; // 생성된 적 리스트
 
+    #region Property
     public List<Enemy> EnemyList => enemyList; // 생성된 적 리스트 프로퍼티
     public Transform[] Waypoints => waypoints; // 이동위치배열 프로퍼티
-
+    public int CurrentEnemyCount => currentEnemyCount; // 현재 남은 저 수 프로퍼티
+    public int MaxEnemyCount => currentWave.maxEnemyCount; // 현재 웨이브 적 수
+    #endregion Property
+    
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
+        if (instance == null) instance = this; // 싱글톤 인스턴스 연결
     }
 
-    // Start는 코루틴으로 사용할 수 있다
-    IEnumerator Start()
+    private void Start()
     {
         // 생성된 적 리스트 초기화
         enemyList = new List<Enemy>();
-        
-        while (true)
+    }
+
+    /// <summary>
+    /// 웨이브 시작
+    /// </summary>
+    /// <param name="wave">웨이브 정보</param>
+    public void StartWave(Wave wave)
+    {
+        // 현재 웨이브 정보 전달
+        currentWave = wave;
+        // 현재 웨이브 최대 적 수를 현재 남은 적 수로 지정
+        currentEnemyCount = currentWave.maxEnemyCount;
+        // 코루틴 실행
+        StartCoroutine(SpawnEnemy());
+    }
+
+    private IEnumerator SpawnEnemy()
+    {
+        // 생성한 적 숫자
+        int spawnEnemyCount = 0;
+        // 웨이브 정보에 있는 최대 생성 숫자에 도달할 때까지
+        while (spawnEnemyCount < currentWave.maxEnemyCount)
         {
-            int index = Random.Range(0, enemyPrefab.Length);
+            // 웨이브 정보에 있는 적 종류 중 랜덤으로 생성
+            int index = Random.Range(0, currentWave.enemyPrefabs.Length);
             // 적 프레팝으로 오브젝트를 생성하고 Enemy 스크립트 연결
-            Enemy enemy = Instantiate(enemyPrefab[index], transform).GetComponent<Enemy>();
+            Enemy enemy = Instantiate(currentWave.enemyPrefabs[index], transform).GetComponent<Enemy>();
             // 적 초기화
             enemy.Init();
             // 적을 리스트에 넣기
             enemyList.Add(enemy);
             // 적 체력 슬라이드 표시
             SpawnEnemyHPSlider(enemy);
+            // 생성한 적 숫자 증가
+            spawnEnemyCount++;
             // 생성시간 기다렸다 다음 적 생성
-            yield return new WaitForSeconds(spawnTime);
+            yield return new WaitForSeconds(currentWave.spawnTime);
         }
     }
 
@@ -65,6 +88,8 @@ public class EnemyManager : MonoBehaviour
             // 골드 증가
             PlayerManager.instance.CurrentGold += gold;
         }
+        // 현재 적 수에서 하나 감소
+
         // 적 리스트에서 지정한 적 지우기
         enemyList.Remove(enemy);
         // 적 오브젝트 삭제

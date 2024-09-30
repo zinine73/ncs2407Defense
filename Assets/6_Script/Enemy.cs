@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     private int currentIndex; // 현재 경로 인덱스
     private float currentHP; // 현재 체력
     private Animator anim; // 애니메이션 제어용 애니메이터
-    private EnemyManager emi;
+    private EnemyManager emi; // 자주 사용할 인스턴스 간소화
 
     public float MaxHP => maxHP; // 최대 체력 프로퍼티
     public float CurrentHP => currentHP; // 현재 체력 프로퍼티
@@ -64,6 +64,10 @@ public class Enemy : MonoBehaviour
         EnemyManager.instance.DestroyEnemy(this, gold, isArrivedGoal);
     }
 
+    /// <summary>
+    /// 적에게 데미지 주기
+    /// </summary>
+    /// <param name="damage">주는 데미지 양</param>
     public void TakeDamage(float damage)
     {
         // 죽은 상태면 더 이상 데미지를 받지 않도록 리턴

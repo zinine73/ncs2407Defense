@@ -13,6 +13,7 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Image imageRed; // 데미지 받았을 때 화면 깜박임
     private float currentHP; // 현재 체력
 
+    #region Property
     public float MaxHP => maxHP; // 최대 체력 프로퍼티
     public float CurrentHP => currentHP;// 현재 체력 프로퍼티
     public int CurrentGold // 현재 골드 프로퍼티
@@ -20,6 +21,7 @@ public class PlayerManager : MonoBehaviour
         get => currentGold;
         set => currentGold = Mathf.Max(0, value); // 음수를 적는 경우 대비
     }
+    #endregion Property
 
     private void Awake()
     {
@@ -35,6 +37,10 @@ public class PlayerManager : MonoBehaviour
         currentHP = maxHP;
     }
 
+    /// <summary>
+    /// 유저가 데미지 받을 때 호출
+    /// </summary>
+    /// <param name="damage">받을 데미지 양</param>
     public void TakeDamage(float damage)
     {
         // 데미지 양만큼 체력을 감소시키고

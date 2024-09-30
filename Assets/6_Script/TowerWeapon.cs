@@ -18,6 +18,9 @@ public class TowerWeapon : MonoBehaviour
     private WeaponState weaponState = WeaponState.SearchTarget; // 타워 상태 저장 변수
     private Transform attackTarget = null; // 공격 목표
 
+    /// <summary>
+    /// 타워 생성 후 초기화로 반드시 한번 호출
+    /// </summary>
     public void Init()
     {
         // 적 찾기 상태로 초기화
@@ -34,7 +37,7 @@ public class TowerWeapon : MonoBehaviour
         StartCoroutine(weaponState.ToString());
     }
 
-    void Update()
+    private void Update()
     {
         // 공격 중이면
         if (attackTarget != null)

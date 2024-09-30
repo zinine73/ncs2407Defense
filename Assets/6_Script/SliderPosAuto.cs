@@ -8,6 +8,10 @@ public class SliderPosAuto : MonoBehaviour
     private Transform targetTransform; // 붙여야 할 대상
     private RectTransform rectTransform; // 슬라이더의 rect tf;
 
+    /// <summary>
+    /// 슬라이더 설정
+    /// </summary>
+    /// <param name="target">붙여야 할 대상의 transform</param>
     public void Setup(Transform target)
     {
         // 붙여야 할 대상 지정

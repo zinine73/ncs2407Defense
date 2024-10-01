@@ -89,7 +89,7 @@ public class EnemyManager : MonoBehaviour
             PlayerManager.instance.CurrentGold += gold;
         }
         // 현재 적 수에서 하나 감소
-
+        currentEnemyCount--;
         // 적 리스트에서 지정한 적 지우기
         enemyList.Remove(enemy);
         // 적 오브젝트 삭제

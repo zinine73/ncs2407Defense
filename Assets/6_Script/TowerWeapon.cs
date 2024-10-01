@@ -17,6 +17,14 @@ public class TowerWeapon : MonoBehaviour
     [SerializeField] private float attackDamage = 1.0f; // 발사체 공격력
     private WeaponState weaponState = WeaponState.SearchTarget; // 타워 상태 저장 변수
     private Transform attackTarget = null; // 공격 목표
+    private int level = 0; // 타워 레벨
+
+    #region Property
+    public int Level => level + 1; // 타워 레벨 프로퍼티
+    public float Damage => attackDamage; // 공격력 프로퍼티
+    public float Rate => attackRate; // 발사 간격 프로퍼티
+    public float Range => attackRange; // 생성범위 프로퍼티
+    #endregion Property
 
     /// <summary>
     /// 타워 생성 후 초기화로 반드시 한번 호출

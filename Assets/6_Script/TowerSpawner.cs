@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TowerSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject towerPrefab; // 타워 프리펩 연결
     [SerializeField] private int towerBuildGold = 50; // 타워 건설 소요 골드
+    [SerializeField] private InfoTower infoTower; // 타워정보 패널
     private ContactFilter2D filter; // Raycast용 파라미터
     private List<RaycastHit2D> rcList; // Raycast 결과 저장용 리스트
 
@@ -17,6 +19,9 @@ public class TowerSpawner : MonoBehaviour
 
     private void Update()
     {
+        // 마우스가 UI 에 있을 때는 바로 리턴
+        if (EventSystem.current.IsPointerOverGameObject() == true) return;
+        
         // 마우스 왼쪽 버튼 클릭하면
         if (Input.GetMouseButtonDown(0))
         {
@@ -32,6 +37,8 @@ public class TowerSpawner : MonoBehaviour
                 // "TOWER" 태그인 아이템이 있으면
                 if (item.transform.CompareTag("TOWER"))
                 {
+                    // 타워 정보 패널에 표시할 정보를 넘기고 패널 켜기
+                    infoTower.OnPanel(item.transform);
                     // 타워가 이미 있으므로 리턴
                     return;
                 }
@@ -46,6 +53,19 @@ public class TowerSpawner : MonoBehaviour
                     SpawnTower(item.transform);
                 }
             }
+        }
+        else if (Input.GetMouseButtonUp(0)) // 다른곳 클릭했을 때 패널정보 없애기
+        {
+            foreach (var item in rcList)
+            {
+                // 타워가 있는 곳은 빼고
+                if (item.transform.CompareTag("TOWER"))
+                {
+                    return;
+                }
+            }
+            // 아닌 곳에서는 정보 패널 끄기
+            infoTower.OffPanel();
         }
     }
 

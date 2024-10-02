@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a1a37124932e774282bba5307ff2f54, type: 3}
+  m_Name: TowerGun1
+  m_EditorClassIdentifier: 
+  towerPrefab: {fileID: 832191632379897938, guid: efb7840090b831f46bf6ce73f6833264, type: 3}
+  weapon:
+  - sprite: {fileID: 21300000, guid: ad2fbd0576240b44f923709b20449f9f, type: 3}
+    damage: 1
+    rate: 0.5
+    range: 2
+    cost: 50
+    sell: 25
+  - sprite: {fileID: 21300000, guid: b1ca6a61f3734254caca1c0114d0607e, type: 3}
+    damage: 1.5
+    rate: 0.4
+    range: 2.3
+    cost: 100
+    sell: 75
+  - sprite: {fileID: 21300000, guid: 6a8f1da7cbf592540a73c919ad3d7a6a, type: 3}
+    damage: 2
+    rate: 0.3
+    range: 2.5
+    cost: 150
+    sell: 120

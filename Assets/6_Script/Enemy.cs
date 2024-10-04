@@ -12,7 +12,8 @@ public class Enemy : MonoBehaviour
     private float currentHP; // 현재 체력
     private Animator anim; // 애니메이션 제어용 애니메이터
     private EnemyManager emi; // 자주 사용할 인스턴스 간소화
-
+    private SpriteRenderer spriteRenderer; // 이미지 반전용 SPriteRenderer
+    
     public float MaxHP => maxHP; // 최대 체력 프로퍼티
     public float CurrentHP => currentHP; // 현재 체력 프로퍼티
 
@@ -28,6 +29,8 @@ public class Enemy : MonoBehaviour
         transform.position = emi.Waypoints[currentIndex].position;
         // 애니메이터 연결
         anim = GetComponent<Animator>();
+        // SpriteRenderer 연결
+        spriteRenderer = GetComponent<SpriteRenderer>();
         // 현재 체력을 최대치로 초기화
         currentHP = maxHP;
         // 살아 있는 상태로 시작
@@ -42,6 +45,14 @@ public class Enemy : MonoBehaviour
             // 현재위치를 frame처리시간비율로 계산한 속도만큼 옮겨줌
             transform.position = Vector3.MoveTowards(transform.position,
                 emi.Waypoints[currentIndex].position, moveSpeed * Time.deltaTime);
+
+            // 현재 오브젝트가 어느 방향으로 이동하는지 검사
+            // MoveTowards 에서 target - current 를 뺀 값의 x 가 0 보다 크냐 작냐로 판단
+            Vector3 direction = emi.Waypoints[currentIndex].position - transform.position;
+
+            // 0 보다 크면 오른쪽으로 가는 것이므로 이때 SpriteRender의 FlipX 를 true
+            // 위로 올라가는 경우에도 오른쪽을 보게 하자
+            spriteRenderer.flipX = (direction.x > 0) || (direction.y > 0);
 
             // 현재위치가 이동지점의 위치라면 배열 인덱스 +1하여 다음 포인트로 이동하도록.
             if (Vector3.Distance(emi.Waypoints[currentIndex].position, transform.position) == 0f)

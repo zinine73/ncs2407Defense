@@ -6,10 +6,12 @@ using UnityEngine.EventSystems;
 public class TowerSpawner : MonoBehaviour
 {
     [SerializeField] private TowerTemplate towerTemplate; // 타워 정보
-    [SerializeField] private GameObject towerPrefab; // 타워 프리펩 연결
     [SerializeField] private InfoTower infoTower; // 타워정보 패널
+    [SerializeField] private ToastMessage toastMsg; // 토스트 메시지
     private ContactFilter2D filter; // Raycast용 파라미터
     private List<RaycastHit2D> rcList; // Raycast 결과 저장용 리스트
+    private bool isOnTowerButton = false; // 타워건설버튼 눌렸는지 체크
+    private GameObject followTowerClone = null; // 임시타워 사용완료시 삭제를 위해 저장하는 변수
 
     private void Start()
     {
@@ -71,19 +73,55 @@ public class TowerSpawner : MonoBehaviour
 
     private void SpawnTower(Transform tileTransform)
     {
-        // 건설 소요 비용이 소지 골드보다 크면 리턴
-        if (towerTemplate.weapon[0].cost > PlayerManager.instance.CurrentGold)
-        {
-            // todo 건설 불가 메시지 출력
-
-            return;
-        }
+        // 타워건설버튼을 눌렀을 때만 건설 가능
+        if (isOnTowerButton == false) return;
+        // 다시 건설 버튼 눌러서 건설하도록 설정
+        isOnTowerButton = false;
         // 소지골드에서 건설비용 차감
         PlayerManager.instance.CurrentGold -= towerTemplate.weapon[0].cost;
-        // 타워프리펩으로 타워 생성
-        GameObject clone = Instantiate(towerPrefab, tileTransform.position, 
+        // 타워템플릿에 있는 타워프리펩으로 타워 생성
+        GameObject clone = Instantiate(towerTemplate.towerPrefab, tileTransform.position, 
             Quaternion.identity, transform);
         // 타워 무기 초기화
         clone.GetComponent<TowerWeapon>().Init();
+        // 임시 타워 삭제
+        Destroy(followTowerClone);
+        // 타워 건설 취소하는 코루틴 중지
+        StopCoroutine(OnTowerCancleSystem());
+    }
+
+    public void ReadyToSpawnTower()
+    {
+        // 버튼 중북해서 누르는 경우 방지
+        if (isOnTowerButton) return;
+
+        // 건설 소요 비용이 소지 골드보다 크면 리턴
+        if (towerTemplate.weapon[0].cost > PlayerManager.instance.CurrentGold)
+        {
+            // 골드 부족 메시지 출력
+            toastMsg.ShowToast(ToastType.Money);
+            return;
+        }
+        // 타워건설 버튼 눌렸다고 설정
+        isOnTowerButton = true;
+        // 마우스를 따라다니는 임시 타워 생성
+        followTowerClone = Instantiate(towerTemplate.followPrefab);
+        // 타워 건설 취소하는 코루틴 시작
+        StartCoroutine(OnTowerCancleSystem());
+    }
+
+    private IEnumerator OnTowerCancleSystem()
+    {
+        while (true)
+        {
+            // esc 또는 마우스 우클릭하면 타워건설 취소
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1))
+            {
+                isOnTowerButton = false;
+                Destroy(followTowerClone);
+                break;
+            }
+            yield return null;
+        }
     }
 }

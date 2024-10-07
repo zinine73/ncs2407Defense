@@ -16,6 +16,7 @@ public class InfoTower : MonoBehaviour
     [SerializeField] private TextMeshProUGUI textBtnSell;   // 판매 비용 텍스트
     [SerializeField] private Button buttonUpgrade; // 업그레이드 버튼
     [SerializeField] private Button buttonSell; // 판매 버튼
+    [SerializeField] private ToastMessage toastMsg; // 토스트 메시지
     private TowerWeapon currentTower; // 현재 타워
 
     private void Start()
@@ -87,8 +88,8 @@ public class InfoTower : MonoBehaviour
         }   
         else
         {
-            // todo 안된다고 메시지 표시
-
+            // 안된다고 메시지 표시
+            toastMsg.ShowToast(ToastType.Money);
         }
     }
 

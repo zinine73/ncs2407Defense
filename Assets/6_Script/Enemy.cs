@@ -42,9 +42,12 @@ public class Enemy : MonoBehaviour
         // 이동지점 배열 인덱스 0 부터 배열크기 -1까지
         if (currentIndex < emi.Waypoints.Length)
         {
+            // 런모드면 더 빠르게
+            float fixedSpeed = anim.GetBool("RUN") ? moveSpeed + 2 : moveSpeed;
+            
             // 현재위치를 frame처리시간비율로 계산한 속도만큼 옮겨줌
             transform.position = Vector3.MoveTowards(transform.position,
-                emi.Waypoints[currentIndex].position, moveSpeed * Time.deltaTime);
+                emi.Waypoints[currentIndex].position, fixedSpeed * Time.deltaTime);
 
             // 현재 오브젝트가 어느 방향으로 이동하는지 검사
             // MoveTowards 에서 target - current 를 뺀 값의 x 가 0 보다 크냐 작냐로 판단
@@ -98,5 +101,13 @@ public class Enemy : MonoBehaviour
             // 피격 애니메이션 실행
             anim.SetTrigger("HIT");
         }
+    }
+
+    /// <summary>
+    /// 이 몬스터를 런모드로 만들어서 빠르게 한다
+    /// </summary>
+    public void StartRunMode()
+    {
+        anim.SetBool("RUN", true);
     }
 }

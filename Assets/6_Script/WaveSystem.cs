@@ -6,9 +6,12 @@ using UnityEngine;
 [System.Serializable]
 public struct Wave
 {
+    public bool         isRandom;       // 랜덤인지 아닌지
     public float        spawnTime;      // 적 생성 주기
     public int          maxEnemyCount;  // 적 최대 숫자
+    public int          runMode;        // 런모드 발생 시기
     public GameObject[] enemyPrefabs;   // 적 종류
+    public float[]      spawnTimeStatic;    // 고정일때 적 생성 주기
 }
 
 public class WaveSystem : MonoBehaviour

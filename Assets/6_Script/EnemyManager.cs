@@ -12,6 +12,7 @@ public class EnemyManager : MonoBehaviour
     private Wave currentWave; // 현재 웨이브 정보
     private int currentEnemyCount; // 현재 남은 적 수
     private List<Enemy> enemyList; // 생성된 적 리스트
+    private bool isRunMode; // 런모드 발동 여부
 
     #region Property
     public List<Enemy> EnemyList => enemyList; // 생성된 적 리스트 프로퍼티
@@ -41,6 +42,8 @@ public class EnemyManager : MonoBehaviour
         currentWave = wave;
         // 현재 웨이브 최대 적 수를 현재 남은 적 수로 지정
         currentEnemyCount = currentWave.maxEnemyCount;
+        // 런모드는 아닌걸로 시작
+        isRunMode = false;
         // 코루틴 실행
         StartCoroutine(SpawnEnemy());
     }
@@ -52,10 +55,19 @@ public class EnemyManager : MonoBehaviour
         // 웨이브 정보에 있는 최대 생성 숫자에 도달할 때까지
         while (spawnEnemyCount < currentWave.maxEnemyCount)
         {
-            // 웨이브 정보에 있는 적 종류 중 랜덤으로 생성
-            int index = Random.Range(0, currentWave.enemyPrefabs.Length);
+            int enemyIndex;
+            if (currentWave.isRandom)
+            {
+                // 웨이브 정보에 있는 적 종류 중 랜덤으로 생성
+                enemyIndex = Random.Range(0, currentWave.enemyPrefabs.Length);
+            }
+            else
+            {
+                // 고정인 경우 카운트가 곧 인덱스
+                enemyIndex = spawnEnemyCount;
+            }
             // 적 프레팝으로 오브젝트를 생성하고 Enemy 스크립트 연결
-            Enemy enemy = Instantiate(currentWave.enemyPrefabs[index], transform).GetComponent<Enemy>();
+            Enemy enemy = Instantiate(currentWave.enemyPrefabs[enemyIndex], transform).GetComponent<Enemy>();
             // 적 초기화
             enemy.Init();
             // 적을 리스트에 넣기
@@ -64,8 +76,15 @@ public class EnemyManager : MonoBehaviour
             SpawnEnemyHPSlider(enemy);
             // 생성한 적 숫자 증가
             spawnEnemyCount++;
+            // 런모드가 발동된 상태면
+            if (isRunMode)
+            {
+                // 새로 생성되는 적에게 바로 런모드 적용
+                enemy.StartRunMode();
+            }
             // 생성시간 기다렸다 다음 적 생성
-            yield return new WaitForSeconds(currentWave.spawnTime);
+            float waitTime = currentWave.isRandom ? currentWave.spawnTime : currentWave.spawnTimeStatic[enemyIndex];
+            yield return new WaitForSeconds(waitTime);
         }
     }
 
@@ -90,6 +109,17 @@ public class EnemyManager : MonoBehaviour
         }
         // 현재 적 수에서 하나 감소
         currentEnemyCount--;
+        // 웨이브 정보에 있는 런모드 발동 조건 검사
+        if (currentWave.runMode == currentEnemyCount)
+        {
+            // 런모드 발동
+            isRunMode = true;
+            // 생성된 적에게 런모드 적용
+            foreach (var item in enemyList)
+            {
+                item.StartRunMode();
+            }
+        }
         // 적 리스트에서 지정한 적 지우기
         enemyList.Remove(enemy);
         // 적 오브젝트 삭제

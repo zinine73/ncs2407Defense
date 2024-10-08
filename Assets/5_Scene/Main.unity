@@ -1164,7 +1164,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -783.27, y: 0.000061035156}
+  m_AnchoredPosition: {x: -783.27, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &124213741
@@ -13926,27 +13926,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - spawnTime: 1
-    maxEnemyCount: 15
+  - isRandom: 0
+    spawnTime: 0
+    maxEnemyCount: 10
+    runMode: 3
     enemyPrefabs:
     - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
     - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
+    - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
+    - {fileID: 3011368747837109445, guid: 212d4a9a8aa7e134f9e71b9607a7785f, type: 3}
+    - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
+    - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
+    - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
+    - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
+    - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
     - {fileID: 2014279935677752162, guid: 53c4ea29d4f71104490dbe5cd877d6d5, type: 3}
-  - spawnTime: 0.7
+    spawnTimeStatic:
+    - 1
+    - 1
+    - 2
+    - 2
+    - 0.2
+    - 0.2
+    - 0.2
+    - 0.2
+    - 2
+    - 0
+  - isRandom: 1
+    spawnTime: 0.7
     maxEnemyCount: 20
+    runMode: 17
     enemyPrefabs:
     - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
     - {fileID: 3011368747837109445, guid: 212d4a9a8aa7e134f9e71b9607a7785f, type: 3}
-  - spawnTime: 0.5
-    maxEnemyCount: 30
+    - {fileID: 2014279935677752162, guid: 53c4ea29d4f71104490dbe5cd877d6d5, type: 3}
+    spawnTimeStatic: []
+  - isRandom: 0
+    spawnTime: 0
+    maxEnemyCount: 10
+    runMode: 4
     enemyPrefabs:
-    - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
-    - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
+    - {fileID: 4821566467108774222, guid: 3a3baf42784a0324da9ec2b56adf9327, type: 3}
     - {fileID: 2014279935677752162, guid: 53c4ea29d4f71104490dbe5cd877d6d5, type: 3}
     - {fileID: 2014279935677752162, guid: 53c4ea29d4f71104490dbe5cd877d6d5, type: 3}
+    - {fileID: 2014279935677752162, guid: 53c4ea29d4f71104490dbe5cd877d6d5, type: 3}
+    - {fileID: 3011368747837109445, guid: 212d4a9a8aa7e134f9e71b9607a7785f, type: 3}
     - {fileID: 3011368747837109445, guid: 212d4a9a8aa7e134f9e71b9607a7785f, type: 3}
     - {fileID: 3011368747837109445, guid: 212d4a9a8aa7e134f9e71b9607a7785f, type: 3}
     - {fileID: 4821566467108774222, guid: 3a3baf42784a0324da9ec2b56adf9327, type: 3}
+    - {fileID: 4821566467108774222, guid: 3a3baf42784a0324da9ec2b56adf9327, type: 3}
+    - {fileID: 4821566467108774222, guid: 3a3baf42784a0324da9ec2b56adf9327, type: 3}
+    spawnTimeStatic:
+    - 5
+    - 0.5
+    - 0.5
+    - 2
+    - 0.5
+    - 0.5
+    - 5
+    - 0.5
+    - 0.5
+    - 0
 --- !u!1001 &1205195247
 PrefabInstance:
   m_ObjectHideFlags: 0

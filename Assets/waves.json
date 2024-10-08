@@ -1,0 +1,137 @@
+{
+    "waveArray": [
+        {
+            "isRandom": false,
+            "spawnTime": 0.0,
+            "maxEnemyCount": 15,
+            "runMode": 3,
+            "enemyPrefabs": [
+                {
+                    "instanceID": 25206
+                },
+                {
+                    "instanceID": 25206
+                },
+                {
+                    "instanceID": 25206
+                },
+                {
+                    "instanceID": 25208
+                },
+                {
+                    "instanceID": 25206
+                },
+                {
+                    "instanceID": 25206
+                },
+                {
+                    "instanceID": 25206
+                },
+                {
+                    "instanceID": 25206
+                },
+                {
+                    "instanceID": 25206
+                },
+                {
+                    "instanceID": 25210
+                },
+                {"instanceID": 25210},
+                {"instanceID": 25210},
+
+                {"instanceID": 25210},
+                {"instanceID": 25210},
+                {"instanceID": 25210},
+                {"instanceID": 25210},
+                {"instanceID": 25210}
+            ],
+            "spawnTimeStatic": [
+                1.0,
+                1.0,
+                2.0,
+                2.0,
+                0.20000000298023225,
+                0.20000000298023225,
+                0.20000000298023225,
+                0.20000000298023225,
+                0.2,
+                0.2,
+                0.2,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                1.0,
+                0
+            ]
+        },
+        {
+            "isRandom": true,
+            "spawnTime": 0.699999988079071,
+            "maxEnemyCount": 20,
+            "runMode": 17,
+            "enemyPrefabs": [
+                {
+                    "instanceID": 25206
+                },
+                {
+                    "instanceID": 25208
+                },
+                {
+                    "instanceID": 25210
+                }
+            ],
+            "spawnTimeStatic": []
+        },
+        {
+            "isRandom": false,
+            "spawnTime": 0.0,
+            "maxEnemyCount": 10,
+            "runMode": 4,
+            "enemyPrefabs": [
+                {
+                    "instanceID": 25212
+                },
+                {
+                    "instanceID": 25210
+                },
+                {
+                    "instanceID": 25210
+                },
+                {
+                    "instanceID": 25210
+                },
+                {
+                    "instanceID": 25208
+                },
+                {
+                    "instanceID": 25208
+                },
+                {
+                    "instanceID": 25208
+                },
+                {
+                    "instanceID": 25212
+                },
+                {
+                    "instanceID": 25212
+                },
+                {
+                    "instanceID": 25212
+                }
+            ],
+            "spawnTimeStatic": [
+                5.0,
+                0.5,
+                0.5,
+                2.0,
+                0.5,
+                0.5,
+                5.0,
+                0.5,
+                0.5,
+                0.0
+            ]
+        }
+    ]
+}

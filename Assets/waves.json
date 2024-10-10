@@ -3,7 +3,7 @@
         {
             "isRandom": false,
             "spawnTime": 0.0,
-            "maxEnemyCount": 15,
+            "maxEnemyCount": 10,
             "runMode": 3,
             "enemyPrefabs": [
                 {
@@ -35,15 +35,7 @@
                 },
                 {
                     "instanceID": 25210
-                },
-                {"instanceID": 25210},
-                {"instanceID": 25210},
-
-                {"instanceID": 25210},
-                {"instanceID": 25210},
-                {"instanceID": 25210},
-                {"instanceID": 25210},
-                {"instanceID": 25210}
+                }
             ],
             "spawnTimeStatic": [
                 1.0,
@@ -54,16 +46,54 @@
                 0.20000000298023225,
                 0.20000000298023225,
                 0.20000000298023225,
-                0.2,
-                0.2,
-                0.2,
-                1.0,
-                1.0,
-                1.0,
-                1.0,
-                1.0,
-                0
+                2.0,
+                0.0
             ]
+        },
+        {
+            "isRandom": true,
+            "spawnTime": 1.0,
+            "maxEnemyCount": 20,
+            "runMode": 4,
+            "enemyPrefabs": [
+                {
+                    "instanceID": 25212
+                },
+                {
+                    "instanceID": 25208
+                },
+                {
+                    "instanceID": 25210
+                },
+                {
+                    "instanceID": 25206
+                }
+            ],
+            "spawnTimeStatic": []
+        },
+        {
+            "isRandom": true,
+            "spawnTime": 0.699999988079071,
+            "maxEnemyCount": 30,
+            "runMode": 5,
+            "enemyPrefabs": [
+                {
+                    "instanceID": 25212
+                },
+                {
+                    "instanceID": 25206
+                },
+                {
+                    "instanceID": 25210
+                },
+                {
+                    "instanceID": 25210
+                },
+                {
+                    "instanceID": 25208
+                }
+            ],
+            "spawnTimeStatic": []
         },
         {
             "isRandom": true,

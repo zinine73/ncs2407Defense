@@ -3141,7 +3141,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 50
+  m_text: 200
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -13953,6 +13953,27 @@ MonoBehaviour:
     - 2
     - 0
   - isRandom: 1
+    spawnTime: 1
+    maxEnemyCount: 20
+    runMode: 4
+    enemyPrefabs:
+    - {fileID: 4821566467108774222, guid: 3a3baf42784a0324da9ec2b56adf9327, type: 3}
+    - {fileID: 3011368747837109445, guid: 212d4a9a8aa7e134f9e71b9607a7785f, type: 3}
+    - {fileID: 2014279935677752162, guid: 53c4ea29d4f71104490dbe5cd877d6d5, type: 3}
+    - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
+    spawnTimeStatic: []
+  - isRandom: 1
+    spawnTime: 0.7
+    maxEnemyCount: 30
+    runMode: 5
+    enemyPrefabs:
+    - {fileID: 4821566467108774222, guid: 3a3baf42784a0324da9ec2b56adf9327, type: 3}
+    - {fileID: 1770649907890885991, guid: dfe0df0eb3e96a64dade93597712e61b, type: 3}
+    - {fileID: 2014279935677752162, guid: 53c4ea29d4f71104490dbe5cd877d6d5, type: 3}
+    - {fileID: 2014279935677752162, guid: 53c4ea29d4f71104490dbe5cd877d6d5, type: 3}
+    - {fileID: 3011368747837109445, guid: 212d4a9a8aa7e134f9e71b9607a7785f, type: 3}
+    spawnTimeStatic: []
+  - isRandom: 1
     spawnTime: 0.7
     maxEnemyCount: 20
     runMode: 17
@@ -16023,7 +16044,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHP: 20
-  currentGold: 100
+  currentGold: 1000
   gameoverUI: {fileID: 1942925766}
   imageRed: {fileID: 1539915810}
 --- !u!4 &1440816678
@@ -16194,7 +16215,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6642d01e26ce6ad4dbfb485c05c1f3a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerTemplate: {fileID: 11400000, guid: 15693144935ed0d43abafe48a55eff3e, type: 2}
+  towerTemplate:
+  - {fileID: 11400000, guid: 15693144935ed0d43abafe48a55eff3e, type: 2}
+  - {fileID: 11400000, guid: 595d38d071d779249bb51ebba91a42f4, type: 2}
   infoTower: {fileID: 1931646464}
   toastMsg: {fileID: 1379528934}
 --- !u!4 &1472528663
@@ -17023,7 +17046,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1472528662}
         m_TargetAssemblyTypeName: TowerSpawner, Assembly-CSharp
         m_MethodName: ReadyToSpawnTower
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -20688,7 +20711,7 @@ GameObject:
   - component: {fileID: 2075581871}
   - component: {fileID: 2075581870}
   m_Layer: 5
-  m_Name: ButtonTowerGun1 (1)
+  m_Name: ButtonTowerLaser1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20758,7 +20781,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2075581871}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1472528662}
+        m_TargetAssemblyTypeName: TowerSpawner, Assembly-CSharp
+        m_MethodName: ReadyToSpawnTower
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2075581871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20779,7 +20814,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ad2fbd0576240b44f923709b20449f9f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 35fbc139258722a409ce880aa3a5b999, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

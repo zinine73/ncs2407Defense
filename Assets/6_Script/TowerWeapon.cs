@@ -1,18 +1,35 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WeaponType // 타워 종류
+{
+    Gun,        // 유도탄
+    Laser       // 레이저
+}
+
 public enum WeaponState // 타워 상태
 {
     SearchTarget,   // 적을 찾기
-    AttactToTarget  // 적을 공격 중
+    TryAttactGun,   // 적을 유도탄으로 공격 중
+    TryAttackLaser  // 레이저 공격 중
 }
 
 public class TowerWeapon : MonoBehaviour
 {
+    [Header("Common")]
     [SerializeField] private TowerTemplate towerTemplate; // 타워 정보
-    [SerializeField] private GameObject projectilePrefab; // 발사체 프리펩
     [SerializeField] private Transform spawnPoint; // 발사체 생성 위치
+    [SerializeField] private WeaponType weaponType; // 무기 속성 설정
+
+    [Header("Gun")]
+    [SerializeField] private GameObject projectilePrefab; // 발사체 프리펩
+
+    [Header("Laser")]
+    [SerializeField] private LineRenderer lineRenderer; // 레이저로 사용되는 선
+    [SerializeField] private Transform hitEffect; // 타격 효과
+
     private WeaponState weaponState = WeaponState.SearchTarget; // 타워 상태 저장 변수
     private Transform attackTarget = null; // 공격 목표
     private SpriteRenderer spriteRenderer; // 타워 이미지 출력 렌더러
@@ -60,56 +77,78 @@ public class TowerWeapon : MonoBehaviour
         }
     }
 
+    private Transform FindClosestAttackTarget()
+    {
+        // 가장 가까운 거리를 찾기 위해 가장 큰 수로 먼저 초기화
+        float closestDistance = Mathf.Infinity;
+        // 리스트에 있는 모든 오브젝트 검사
+        foreach (var item in EnemyManager.instance.EnemyList)
+        {
+            // 두 오브젝트 사이의 거리를 측정
+            float distance = Vector3.Distance(item.transform.position, transform.position);
+            // 공격 사정 거리 안에 있으면서 가장 긴 거리보다 작으면
+            if ((distance <= towerTemplate.weapon[level].range) && (distance <= closestDistance))
+            {
+                // 현재 거리를 최단 거리로 지정
+                closestDistance = distance;
+                // 공격 목표를 현재 오브젝트로 지정
+                attackTarget = item.transform;
+            }
+        }
+        return attackTarget;
+    }
+
+    private bool IsPossibleToAttackTarget()
+    {
+        // 대상이 있는지 검사
+        if (attackTarget == null)
+        {
+            return false;
+        }
+        // 적과의 거리 측정
+        float distance = Vector3.Distance(attackTarget.position, transform.position);
+        // 거리가 공격범위를 벗어나면
+        if (distance > towerTemplate.weapon[level].range)
+        {
+            // 공격목표를 없애고
+            attackTarget = null;
+            return false;
+        }
+        return true;
+    }
+
     private IEnumerator SearchTarget()
     {
         while(true)
         {
-            // 가장 가까운 거리를 찾기 위해 가장 큰 수로 먼저 초기화
-            float closestDistance = Mathf.Infinity;
-            // 리스트에 있는 모든 오브젝트 검사
-            foreach (var item in EnemyManager.instance.EnemyList)
-            {
-                // 두 오브젝트 사이의 거리를 측정
-                float distance = Vector3.Distance(item.transform.position, transform.position);
-                // 공격 사정 거리 안에 있으면서 가장 긴 거리보다 작으면
-                if ((distance <= towerTemplate.weapon[level].range) && (distance <= closestDistance))
-                {
-                    // 현재 거리를 최단 거리로 지정
-                    closestDistance = distance;
-                    // 공격 목표를 현재 오브젝트로 지정
-                    attackTarget = item.transform;
-                }
-            }
+            // 현재 타워에 가장 가까이 있는 공격 대상 탐색
+            attackTarget = FindClosestAttackTarget();
+
             // 공격 목표가 null이 아니면
             if (attackTarget != null)
             {
-                // 공격 상태로 변경
-                ChangeState(WeaponState.AttactToTarget);
+                // 무기 상태에 따른 공격 상태로 변경
+                if (weaponType == WeaponType.Gun)
+                {
+                    ChangeState(WeaponState.TryAttactGun);
+                }
+                else if (weaponType == WeaponType.Laser)
+                {
+                    ChangeState(WeaponState.TryAttackLaser);
+                }
             }
             // 코루틴으로 계속 적 찾기
             yield return null;
         }
     }
 
-    private IEnumerator AttactToTarget()
+    private IEnumerator TryAttactGun()
     {
         while(true)
         {
-            // 공격 목표가 사라지면
-            if (attackTarget == null)
+            // 타겟이 공격 가능한지 검사
+            if (IsPossibleToAttackTarget() == false)
             {
-                // 적 찾기 상태로 변경
-                ChangeState(WeaponState.SearchTarget);
-                // 바로 while문 빠져 나오기
-                break;
-            }
-            // 적과의 거리 측정
-            float distance = Vector3.Distance(attackTarget.position, transform.position);
-            // 거리가 공격범위를 벗어나면
-            if (distance > towerTemplate.weapon[level].range)
-            {
-                // 공격목표를 없애고
-                attackTarget = null;
                 // 적 찾기 상태로 변경
                 ChangeState(WeaponState.SearchTarget);
                 // 바로 while문 빠져 나오기
@@ -120,6 +159,51 @@ public class TowerWeapon : MonoBehaviour
             // 발사체 생성
             SpawnProjectile();
         }
+    }
+
+    private void SetAttackLaser(bool value)
+    {
+        // 레이저인 경우에만 해당
+        if (weaponType != WeaponType.Laser) return;
+        // 레이저 선 켜고 끄기
+        lineRenderer.gameObject.SetActive(value);
+        // 타격 효과 켜고 끄기
+        hitEffect.gameObject.SetActive(value);
+    }
+
+    private IEnumerator TryAttackLaser()
+    {
+        // 레이저, 레이저 타격효과 활성화
+        SetAttackLaser(true);
+
+        while (true)
+        {
+            // 타겟을 공격하는게 가능한지 검사
+            if (IsPossibleToAttackTarget() == false)
+            {
+                // 레이저, 레이저 타격효과 비활성화
+                SetAttackLaser(false);
+                ChangeState(WeaponState.SearchTarget);
+                break;
+            }
+
+            // 레이저 공격
+            SpwanLaser();
+
+            yield return null;
+        }
+    }
+
+    private void SpwanLaser()
+    {
+        // 선의 시작 지점
+        lineRenderer.SetPosition(0, spawnPoint.position);
+        // 선의 목표 지점
+        lineRenderer.SetPosition(1, new Vector3(attackTarget.position.x, attackTarget.position.y, 0) + Vector3.back);
+        // 타격효과 위치 설정
+        hitEffect.position = new Vector3(attackTarget.position.x, attackTarget.position.y - 0.2f, 0);
+        // 적 체력 감소 (1초에 damage만큼 감소)
+        attackTarget.GetComponent<Enemy>().TakeDamage(towerTemplate.weapon[level].damage * Time.deltaTime);
     }
 
     private void SpawnProjectile()
@@ -151,6 +235,13 @@ public class TowerWeapon : MonoBehaviour
         spriteRenderer.sprite = towerTemplate.weapon[level].sprite;
         // 골드에서 건설 비용 차감하고
         PlayerManager.instance.CurrentGold -= towerTemplate.weapon[level].cost;
+        // 무기 속성이 레이저면
+        if (weaponType == WeaponType.Laser)
+        {
+            // 레벨에 따라 레이저의 굵기 결정
+            lineRenderer.startWidth = 0.05f + level * 0f;
+            lineRenderer.endWidth = 0.05f;
+        }
         // 성공 리턴
         return true;
     }
